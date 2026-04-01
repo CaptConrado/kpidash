@@ -31,12 +31,22 @@ SCHEDULER.every '5s' do
     ]
   })
 
+  sentiment_score = (0.68 + rand(-0.08..0.08)).round(2)
+  sentiment_label = if sentiment_score >= 0.72
+                      'Positive'
+                    elsif sentiment_score >= 0.60
+                      'Neutral+'
+                    else
+                      'Needs Attention'
+                    end
+
   send_event('ops_alerts', {
     items: [
       { label: 'Claims Queue', value: "#{140 + rand(-10..12)} open" },
       { label: 'Support FRT', value: "#{(2.4 + rand(-0.4..0.5)).round(1)} min" },
       { label: 'Fraud Blocks', value: "#{(0.7 + rand(-0.2..0.2)).round(2)}%" },
-      { label: 'Host Activation', value: "#{(44.5 + rand(-1.5..1.5)).round(1)}%" }
+      { label: 'Host Activation', value: "#{(44.5 + rand(-1.5..1.5)).round(1)}%" },
+      { label: 'Sentiment (Guest Reviews)', value: "#{sentiment_label} (#{sentiment_score})" }
     ]
   })
 end
